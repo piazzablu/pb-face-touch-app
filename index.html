@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Oliver Goerke, piazza blu GmbH, Germany">
+  <title>Don't touch your face - an app that helps you break the habit - piazza blu</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script>(function (i, s, o, g, r, a, m) { i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o), m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m) })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga'); ga('create', 'UA-61112787-1', 'auto'); ga('require', 'displayfeatures'); ga('set', 'anonymizeIp', true); ga('send', 'pageview');
+  </script>
+  <!-- End Google Analytics -->
+
+  <!-- script for cookie disclaimer -->
+  <script>
+    var cnArgs = {
+      "ajaxurl": "https:\/\/www.piazzablu.com\/wp-admin\/admin-ajax.php",
+      "hideEffect": "fade", "onScroll": "no", "onScrollOffset": "100", "onClick": "",
+      "cookieName": "cookie_notice_accepted", "cookieValue": "true", "cookieTime": "31536000",
+      "cookiePath": "\/", "cookieDomain": "", "redirection": "1", "cache": "1", "refuse": "yes",
+      "revoke_cookies": "0", "revoke_cookies_opt": "automatic", "secure": "1"
+    };
+
+    var cnArgs = {
+      "ajaxurl": "https:\/\/www.piazzablu.com\/wp-admin\/admin-ajax.php",
+      "hideEffect": "fade", "onScroll": "no", "onScrollOffset": "100", "onClick": "",
+      "cookieName": "cookie_notice_accepted", "cookieTime": "31536000", "cookieTimeRejected": "2592000",
+      "cookiePath": "\/", "cookieDomain": "", "redirection": "1", "cache": "1", "refuse": "yes",
+      "revoke_cookies": "0", "revoke_cookies_opt": "automatic", "secure": "1"
+    };
+  </script>
+  <script src="https://www.piazzablu.com/wp-content/plugins/cookie-notice/js/front.min.js?ver=1.2.51"></script>
+
+</head>
+
+<body>
+
+  <header id="masthead">
+    <div class="site-logo">
+      <a href="https://www.piazzablu.com/" rel="home">
+        <img src="https://www.piazzablu.com/wp-content/themes/piazzablu/img/piazzablu-logo-weiss.svg" alt="">
+      </a>
+    </div>
+    <p id="scrollHint">Scroll down for more tracked information.</p>
+  </header>
+
+  <div id="content">
+
+    <div id="videobox">
+
+      <div id="teaser">
+        <img src="touch.svg" width="500px" />
+        <br />
+        <button id="startButton" onclick="startTracking();">Start WebCam Tracking</button>
+        <br />
+        <p>Please allow camera access and sound. <br />If no camera picture appears check your settings.</p>
+      </div>
+
+      <canvas id="canvas" width="400px" height="400px" style="z-index: 999; transform: rotateY(180deg);"></canvas>
+      <video playsinline onLoadedData="startDetection();" class="videobox canvasbox" autoplay="autoplay" id="video" style="transform: rotateY(180deg);">
+      </video>
+
+    </div>
+
+    <div id="textContainer">
+
+      <h3 style="display: none; color: red;" id="counterHeadline">Time elapsed <span id="time">00:00</span>, Possible touches <span id="touchCount">0</span></h3>
+
+      <h1>Try to break the habit of touching your face</h1>
+      <p>To adress the infection risk of the <strong>Corona-Virus</strong>, we provide this app
+        to help you minimize touching your face. Most of these touches happen without perception.
+        This app will play a sound whenever a hand is detected and you touch your face.
+        (The sound does not play on iOS, Safari due to javascript restrictions).
+
+      <h2>Useful hints</h2>
+      <ul>
+        <li>The detection of hands can turn out to be "flickering" depending on your actual camera image, light conditions and background.</li>
+        <li>This is computing intensive math!!! Depending on your hardware and browser this might not work fluently. This sample need a new CPU/GPU to work.</li>
+        <li>When the browser window is not in the foreground, the app can slow down or stop. Modern browser try to minimize energy consumption of non active windows.</li>
+      </ul>
+
+      <h2>How does this work</h2>
+      <p>
+        The technical implementation is based on neural networks that track your face and your hands running on <a href="https://www.tensorflow.org/js">tensorflow.js</a> in your browser.
+        We track the exact position of your face and your fingers as you can see in the live picture.
+      </p>
+
+      <p>
+        Stay tuned &amp; healthy! <br />
+        All the best</br></br>
+
+        The <a href="https://www.piazzablu.com/en/pb-labs/">piazza blu labs</a> Team
+      </p>
+
+      <h2>Legal stuff</h2>
+      <footer>
+        <p>© 2020 piazza blu² GmbH</p>
+        <ul>
+          <li>
+            <a href="https://www.piazzablu.com/en/kontakt/">Contact</a>
+          </li>
+          <li>
+            <a href="https://www.piazzablu.com/en/datenschutz/">Data protection</a>
+          </li>
+          <li>
+            <a href="https://www.piazzablu.com/en/impressum/">Legal Notice</a>
+          </li>
+        </ul>
+      </footer>
+
+
+    </div>
+
+  </div>
+
+
+  <div id="cookie-notice" role="banner" class="cookie-revoke-hidden cn-position-bottom cn-effect-fade cookie-notice-visible" aria-label="Cookie Notice" style="background-color: #0071b9;">
+    <div class="cookie-notice-container" style="color: #fff;"><span id="cn-notice-text" class="cn-text-container">
+        Please confirm that you accept our tracking mechanisms.
+        However, you can also reject it and continue to visit our website without sending data to third parties. We do not use cookies to display personalized content.
+      </span>
+      <br />
+      <span id="cn-notice-buttons" class="cn-buttons-container">
+        <a href="#" id="cn-accept-cookie" data-cookie-set="accept" class="cn-set-cookie cn-button bootstrap button">OK</a>
+        <a href="#" id="cn-refuse-cookie" data-cookie-set="refuse" class="cn-set-cookie cn-button bootstrap button">Deny</a>
+        <a href="https://www.piazzablu.com/en/datenschutz/" target="_blank" id="cn-more-info" class="cn-more-info cn-button bootstrap button">Data Protection</a>
+      </span></div>
+  </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/dist/tf-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter/dist/tf-converter.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
+
+  <script>
+
+    var handmodel;
+    var facemodel;
+
+    var hands;
+    var faces;
+
+    var count = 0;
+    var state;
+
+    var warn = new sound("sound.mp3");
+
+    var startDate = new Date();
+    var startTime = startDate.getTime();
+
+    var canvas = document.querySelector("canvas");
+    var context = canvas.getContext("2d");
+
+
+    const video = document.getElementById('video');
+
+    navigator.mediaDevices.getUserMedia({ video: true });
+
+    // cookie accept shit
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    if (getCookie('cookie_notice_accepted') == '') {
+      document.getElementById('cookie-notice').style.display = 'block';
+    }
+
+    // added for iOS
+    document.getElementById('startButton').addEventListener('click', function () { video.play(); warn.play(); })
+
+    async function startVideo() {
+      // get access to the camera!
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+          video.srcObject = stream;
+        });
+      }
+      else {
+        document.getElementById('startButton').innerText = 'No camera detected';
+      }
+    }
+
+    async function loadModels() {
+      // load the mediapipe handpose model assets 
+      handmodel = await handpose.load();
+      facemodel = await facemesh.load();
+    }
+
+    window.addEventListener('resize', function (event) {
+      // rescale the canvas to the video size
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerWidth * (video.videoHeight / video.videoWidth);
+      context = canvas.getContext("2d");
+      context.scale(window.innerWidth / video.videoWidth, window.innerWidth / video.videoWidth);
+    });
+
+    async function startDetection() {
+
+      //remove minHeight to adress full size video
+      document.getElementById('videobox').style.minHeight = '0px';
+
+      warn.src("sound.mp3");
+
+      // rescale the canvas to the video size
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerWidth * (video.videoHeight / video.videoWidth);
+      context = canvas.getContext("2d");
+      context.scale(window.innerWidth / video.videoWidth, window.innerWidth / video.videoWidth);
+
+      // wait for the first call to happen (takes long)
+      await detect();
+
+      // detect with a frame rate of 10 FPS
+      setInterval(function () {
+        detect();
+      }, 350);
+
+      // start timer
+      startDate = new Date();
+      startTime = startDate.getTime();
+
+      // remove the teaser and background
+      document.getElementById('teaser').remove();
+      document.getElementById('videobox').style.background = 'none';
+      document.getElementById('scrollHint').style.display = 'block';
+
+      time_spent();
+    }
+
+    async function detect() {
+
+      hands = await handmodel.estimateHands(video);
+      faces = await facemodel.estimateFaces(video);
+
+      //if ever a hand "appears" in the picture and the state changes
+      if (hands.length > 0 && faces.length > 0) {
+
+        // if (hands[0].annotations.indexFinger[3][0] < faces[0].boundingBox.bottomRight[0][0] && hands[0].annotations.indexFinger[3][1] < faces[0].boundingBox.bottomRight[0][1] && hands[0].annotations.indexFinger[3][0] > faces[0].boundingBox.topLeft[0][0] && hands[0].annotations.indexFinger[3][1] > faces[0].boundingBox.topLeft[0][1]) {
+        if (hands[0].annotations.indexFinger[3][0] < faces[0].boundingBox.bottomRight[0] && hands[0].annotations.indexFinger[3][1] < faces[0].boundingBox.bottomRight[1] && hands[0].annotations.indexFinger[3][0] > faces[0].boundingBox.topLeft[0] && hands[0].annotations.indexFinger[3][1] > faces[0].boundingBox.topLeft[1]) {
+          if (state == false) {
+            state = true;
+            count += 1;
+          }
+          warn.play();
+          document.getElementById('touchCount').innerText = '' + count;
+        }
+      } else {
+        warn.stop();
+        state = false;
+      }
+
+
+      if (faces.length > 0) {
+
+        context.lineWidth = 3;
+
+        // clear the frame
+        context.clearRect(0, 0, 5000, 3000);
+
+        if (hands.length > 0 && hands[0].handInViewConfidence > .9) {
+          //console.log(hands[0]);
+          context.strokeStyle = "yellow";
+          context.strokeRect(
+            hands[0].annotations.thumb[3][0],
+            hands[0].annotations.thumb[3][1],
+            5, 5
+          );
+          context.strokeRect(
+            hands[0].annotations.indexFinger[3][0],
+            hands[0].annotations.indexFinger[3][1],
+            5, 5
+          );
+          context.strokeRect(
+            hands[0].annotations.middleFinger[3][0],
+            hands[0].annotations.middleFinger[3][1],
+            5, 5
+          );
+          context.strokeRect(
+            hands[0].annotations.ringFinger[3][0],
+            hands[0].annotations.ringFinger[3][1],
+            5, 5
+          );
+          context.strokeRect(
+            hands[0].annotations.pinky[3][0],
+            hands[0].annotations.pinky[3][1],
+            5, 5
+          );
+        }
+
+        // 
+        context.strokeStyle = "yellow";
+        context.strokeRect(
+          faces[0].boundingBox.topLeft[0][0],
+          faces[0].boundingBox.topLeft[0][1],
+          faces[0].boundingBox.bottomRight[0][0] - faces[0].boundingBox.topLeft[0][0],
+          faces[0].boundingBox.bottomRight[0][1] - faces[0].boundingBox.topLeft[0][1]
+        );
+
+        // draw face polygon
+        context.strokeStyle = "yellow";
+        context.beginPath();
+        context.moveTo(faces[0].annotations.silhouette[0][0], faces[0].annotations.silhouette[0][1]);
+        faces[0].annotations.silhouette.forEach(element => {
+          context.lineTo(element[0], element[1]);
+        });
+        context.closePath();
+        context.stroke();
+
+      }
+
+    }
+
+    async function startTracking() {
+      document.getElementById('startButton').innerText = 'Loading Models';
+      await loadModels();
+      document.getElementById('startButton').innerText = 'Starting Video';
+      await startVideo();
+      document.getElementById('startButton').innerText = 'Starting Detection';
+    }
+
+    function seconds_elapsed() {
+      var date_now = new Date();
+      var time_now = date_now.getTime();
+      var time_diff = time_now - startTime;
+      var seconds_elapsed = Math.floor(time_diff / 1000);
+      return (seconds_elapsed);
+    }
+
+    function time_spent() {
+      var secs = seconds_elapsed()
+      var mins = Math.floor(secs / 60);
+      secs -= mins * 60;
+      var hour = Math.floor(mins / 60);
+      mins -= hour * 60;
+      document.getElementById('counterHeadline').style.display = "block";
+      document.getElementById('time').innerText = pad(mins) + ":" + pad(secs);
+      setTimeout("time_spent ()", 200);
+    }
+
+    function pad(num) {
+      return ((num > 9) ? num : "0" + num);
+    }
+
+    // the warning sound
+    function sound(src) {
+      this.sound = document.createElement("audio");
+      this.sound.src = src;
+      this.sound.setAttribute("preload", "auto");
+      this.sound.setAttribute("loop", "true");
+      this.sound.setAttribute("controls", "none");
+      this.sound.style.display = "none";
+      document.body.appendChild(this.sound);
+      this.play = function () {
+        this.sound.play();
+      }
+      this.stop = function () {
+        this.sound.pause();
+      }
+      this.src = function (src) {
+        this.sound.src = src;
+      }
+    }
+
+
+
+  </script>
+</body>
+
+</html>

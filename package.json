@@ -1,0 +1,23 @@
+{
+  "name": "pb-face-touch-app",
+  "version": "1.0.0",
+  "description": "## How to stop touching your face in the times of COVID-19",
+  "main": "index.html",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piazzablu/pb-face-touch-app.git"
+  },
+  "author": "Oliver Goerke",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/piazzablu/pb-face-touch-app/issues"
+  },
+  "homepage": "https://github.com/piazzablu/pb-face-touch-app#readme"
+}
