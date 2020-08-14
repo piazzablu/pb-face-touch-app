@@ -1,4 +1,4 @@
-# face touch demo app
+# piazza blu face touch app
 
 ## How to stop touching your face in the times of COVID-19
 
