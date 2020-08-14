@@ -3,9 +3,9 @@
 ## How to stop touching your face in the times of COVID-19
 
 A study published in the Journal of Occupational and Environmental Hygiene found that a person touches their face 15.7 times in an hour on average. \
-One of the five most important precautions you can take to protect yourself from the novel coronavirus infection is to avoid touching your face.\
+One of the five most important precautions you can take to protect yourself from the novel coronavirus infection is to avoid touching your face.
 
-We know this because we know how people catch viral infections - your hands can pick up the virus when they come in contact with a contaminated surface and transfer it to your nose, mouth or eyes when you touch your face. (The other important way coronavirus spreads is through sneeze and cough droplets.) \
+We know this because we know how people catch viral infections - your hands can pick up the virus when they come in contact with a contaminated surface and transfer it to your nose, mouth or eyes when you touch your face. (The other important way coronavirus spreads is through sneeze and cough droplets.) 
 
 Therefore it is very important to avoid touching your face and this little tool can help you detecting touches to your face.
 
